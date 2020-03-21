@@ -89,6 +89,7 @@ export default {
     },
     playmv: function(item) {
       this.flog = true;
+      this.isplay = false;
       let that = this;
       this.$axios
         .get("https://autumnfish.cn/mv/url?id=" + item.mvid)
@@ -146,13 +147,13 @@ div.mv {
 }
 .mv video {
   width: 70%;
-  z-index: 999;
+  z-index: 999999;
 }
 .mask {
   width: 100%;
   height: 80%;
   position: fixed;
-  z-index: 99;
+  z-index: 99999;
 }
 .hotcomments {
   flex: 1;
