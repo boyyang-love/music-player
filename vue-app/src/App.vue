@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <Menu @songs="savesongs" />
-    <Mshow :songsname="songsname" @musicurl="musicurl" />
-    <Player :musicurl="url" />
+    <Mshow :songsname="songsname" @musicurl="musicurl" :iscircle="iscircle" />
+    <Player :musicurl="url" @play="play" @pause="pause" />
   </div>
 </template>
 
@@ -19,7 +19,8 @@ export default {
   data() {
     return {
       songsname: "",
-      url: ""
+      url: "",
+      iscircle: ""
     };
   },
   methods: {
@@ -30,6 +31,12 @@ export default {
     musicurl: function(url) {
       this.url = url;
       // console.log(url);
+    },
+    play: function(play) {
+      this.iscircle = play;
+    },
+    pause: function(pause) {
+      this.iscircle = pause;
     }
   }
 };

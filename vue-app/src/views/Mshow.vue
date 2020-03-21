@@ -9,7 +9,11 @@
         </li>
       </ul>
     </div>
-    <div class="mvplay"></div>
+    <div class="mvplay">
+      <div :class="{circle:iscircle}" v-show="isplay">
+        <img :src="img" alt />
+      </div>
+    </div>
     <div class="hotcomments">
       <ul>
         <li v-for="(item,i) in musichotcomments" :key="i">
@@ -39,11 +43,14 @@ export default {
       musichotcomments: "",
       n: "",
       flog: false,
-      mvurl: ""
+      isplay: false,
+      // iscircle: true,
+      mvurl: "",
+      img: ""
       // checked: false
     };
   },
-  props: ["songsname"],
+  props: ["songsname", "iscircle"],
   methods: {
     musicplay: function(item, i) {
       this.n = i;
@@ -53,7 +60,7 @@ export default {
         .get("https://autumnfish.cn/song/url?id=" + item.id)
         .then(res => {
           that.musicurl = res.data.data[0].url;
-          //   console.log(res.data.data[0].url);
+          // console.log(res);
           that.$emit("musicurl", that.musicurl);
         })
         .catch(error => {
@@ -69,6 +76,16 @@ export default {
         .catch(error => {
           console.log(error);
         });
+      this.$axios
+        .get("https://autumnfish.cn/song/detail?ids=" + item.id)
+        .then(res => {
+          // console.log(res.data.songs[0].al.picUrl);
+          that.isplay = true;
+          that.img = res.data.songs[0].al.picUrl;
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
     playmv: function(item) {
       this.flog = true;
@@ -77,7 +94,7 @@ export default {
         .get("https://autumnfish.cn/mv/url?id=" + item.mvid)
         .then(res => {
           that.mvurl = res.data.data.url;
-          console.log(res.data.data.url);
+          // console.log(res.data.data.url);
         })
         .catch(error => {
           console.log(error);
@@ -110,6 +127,16 @@ export default {
 .mvplay {
   flex: 2;
   border-right: 1px solid goldenrod;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.mvplay div {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 div.mv {
   display: flex;
@@ -197,5 +224,30 @@ h5 {
   color: white;
   font-size: 18px;
   font-weight: bold;
+}
+.mvplay img {
+  width: 200px;
+  height: 200px;
+  border-radius: 100%;
+  border: 80px solid black;
+}
+
+.circle img {
+  width: 200px;
+  height: 200px;
+  border-radius: 100%;
+  border: 80px solid black;
+  animation: zhuan 5s infinite;
+  transition-timing-function: linear;
+  transition-delay: 0s;
+}
+
+@keyframes zhuan {
+  from {
+    transform: rotateZ(0deg);
+  }
+  to {
+    transform: rotateZ(360deg);
+  }
 }
 </style>

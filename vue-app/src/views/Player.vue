@@ -1,13 +1,21 @@
 <template>
   <div class="player">
-    <audio :src="musicurl" autoplay controls></audio>
+    <audio :src="musicurl" autoplay controls @play="play" @pause="pause"></audio>
   </div>
 </template>
 
 <script>
 export default {
   name: "Player",
-  props: ["musicurl"]
+  props: ["musicurl"],
+  methods: {
+    play: function() {
+      this.$emit("play", true);
+    },
+    pause: function() {
+      this.$emit("pause", false);
+    }
+  }
 };
 </script>
 
