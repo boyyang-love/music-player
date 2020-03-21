@@ -10,7 +10,19 @@
       </ul>
     </div>
     <div class="mvplay"></div>
-    <div class="hotcomments"></div>
+    <div class="hotcomments">
+      <ul>
+        <li v-for="(item,i) in musichotcomments" :key="i">
+          <span class="pho">
+            <img :src="item.user.avatarUrl" alt />
+          </span>
+          <span class="hot">
+            <h5>{{item.user.nickname}}</h5>
+            <h4>{{item.content}}}</h4>
+          </span>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -19,12 +31,15 @@ export default {
   name: "Mshow",
   data() {
     return {
-      musicurl: ""
+      musicurl: "",
+      musichotcomments: ""
+      // checked: false
     };
   },
   props: ["songsname"],
   methods: {
     musicplay: function(item) {
+      // this.checked = true;
       let that = this;
       this.$axios
         .get("https://autumnfish.cn/song/url?id=" + item.id)
@@ -32,6 +47,16 @@ export default {
           that.musicurl = res.data.data[0].url;
           //   console.log(res.data.data[0].url);
           that.$emit("musicurl", that.musicurl);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+
+      this.$axios
+        .get("https://autumnfish.cn/comment/hot?type=0&id=" + item.id)
+        .then(res => {
+          that.musichotcomments = res.data.hotComments;
+          // console.log(res.data.hotComments);
         })
         .catch(error => {
           console.log(error);
@@ -53,21 +78,25 @@ export default {
   border-right: 1px solid goldenrod;
   overflow: scroll;
 }
+.check {
+  background-color: coral;
+}
 .mvplay {
   flex: 2;
   border-right: 1px solid goldenrod;
 }
 .hotcomments {
   flex: 1;
+  overflow: scroll;
 }
-ul {
+.mlist ul {
   margin: 0;
   padding: 0;
   list-style: none;
   display: flex;
   flex-wrap: wrap;
 }
-ul li {
+.mlist ul li {
   display: flex;
   height: 23px;
   width: 100%;
@@ -83,7 +112,7 @@ ul li {
   flex: 1;
   align-self: flex-end;
 }
-ul li:hover {
+.mlist ul li:hover {
   background-color: hotpink;
 }
 a {
@@ -97,5 +126,29 @@ a {
 i {
   font-size: 20px;
   color: brown;
+}
+
+.hotcomments ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.hotcomments ul li {
+  display: flex;
+  margin-top: 20px;
+}
+span.pho {
+  align-self: start;
+}
+.pho img {
+  width: 120px;
+  height: 120px;
+  border-radius: 100%;
+}
+h5 {
+  margin: 0;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
 }
 </style>
