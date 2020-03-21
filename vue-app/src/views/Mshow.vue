@@ -2,10 +2,10 @@
   <div class="mshow">
     <div class="mlist">
       <ul>
-        <li v-for="(item,i) in songsname" :key="i" @click="musicplay(item)">
-          <i class="iconfont icon-bofang1 start"></i>
-          <a href="#">{{item.name}}</a>
-          <i class="iconfont icon-MV end"></i>
+        <li v-for="(item,i) in songsname" :key="i" :class="{checked:i==n}">
+          <i class="iconfont icon-bofang1 start" @click="musicplay(item,i)"></i>
+          <a href="#" @click="musicplay(item,i)">{{item.name}}</a>
+          <i class="iconfont icon-MV end" @click="playmv(item)" v-show="item.mvid !=0"></i>
         </li>
       </ul>
     </div>
@@ -23,6 +23,10 @@
         </li>
       </ul>
     </div>
+    <div class="mv" v-show="flog">
+      <video id="player" :src="mvurl" controls autoplay></video>
+      <div class="mask" @dblclick="closemv"></div>
+    </div>
   </div>
 </template>
 
@@ -32,14 +36,18 @@ export default {
   data() {
     return {
       musicurl: "",
-      musichotcomments: ""
+      musichotcomments: "",
+      n: "",
+      flog: false,
+      mvurl: ""
       // checked: false
     };
   },
   props: ["songsname"],
   methods: {
-    musicplay: function(item) {
-      // this.checked = true;
+    musicplay: function(item, i) {
+      this.n = i;
+      // console.log(i);
       let that = this;
       this.$axios
         .get("https://autumnfish.cn/song/url?id=" + item.id)
@@ -61,6 +69,24 @@ export default {
         .catch(error => {
           console.log(error);
         });
+    },
+    playmv: function(item) {
+      this.flog = true;
+      let that = this;
+      this.$axios
+        .get("https://autumnfish.cn/mv/url?id=" + item.mvid)
+        .then(res => {
+          that.mvurl = res.data.data.url;
+          console.log(res.data.data.url);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    closemv: function() {
+      this.flog = false;
+      let video = document.getElementById("player");
+      video.pause();
     }
   }
 };
@@ -78,12 +104,28 @@ export default {
   border-right: 1px solid goldenrod;
   overflow: scroll;
 }
-.check {
+.checked {
   background-color: coral;
 }
 .mvplay {
   flex: 2;
   border-right: 1px solid goldenrod;
+}
+div.mv {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+}
+.mv video {
+  width: 70%;
+  z-index: 999;
+}
+.mask {
+  width: 100%;
+  height: 80%;
+  position: fixed;
+  z-index: 99;
 }
 .hotcomments {
   flex: 1;
@@ -101,6 +143,7 @@ export default {
   height: 23px;
   width: 100%;
   margin-top: 5px;
+  overflow: hidden;
 }
 .start {
   flex: 1;
@@ -110,16 +153,20 @@ export default {
 }
 .end {
   flex: 1;
+  width: 50%;
   align-self: flex-end;
+}
+i.end:hover {
+  color: red;
 }
 .mlist ul li:hover {
   background-color: hotpink;
 }
 a {
-  flex: 3;
+  flex: 9;
   text-decoration: none;
   color: white;
-  font-size: 20px;
+  font-size: 16px;
   line-height: 18px;
   margin-left: 5px;
 }

@@ -29,7 +29,7 @@ export default {
     },
     musicurl: function(url) {
       this.url = url;
-      console.log(url);
+      // console.log(url);
     }
   }
 };
