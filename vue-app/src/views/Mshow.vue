@@ -114,7 +114,7 @@ export default {
 .mshow {
   width: 100%;
   height: 500px;
-  background-color: aqua;
+  background-color: #345853;
   display: flex;
 }
 .mlist {

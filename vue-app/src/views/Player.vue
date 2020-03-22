@@ -22,7 +22,6 @@ export default {
 <style scoped>
 .player {
   width: 100%;
-  background-color: aqua;
 }
 audio {
   height: 50px;

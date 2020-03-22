@@ -2,7 +2,7 @@
   <div class="menu">
     <div class="name">
       <a href="https://music.163.com/">
-        <i class="iconfont icon-yinle2"></i> 乐听
+        <i class="iconfont icon-yinle2"></i> BOYYANG
       </a>
     </div>
 
